@@ -38,10 +38,10 @@ class Game:
         start_screen(self)
 
         # 按钮：start 按钮，点击后跳转到帮助页面
-        button1 = Button(200, 600, 402, 250, BUTTON_START_PATH, "Go to Help", go_to_help_page, self)
+        button1 = Button(200, 600, 402, 250, BUTTON_START_PATH, "Go to Help", go_to_game_page, self)
 
         # 按钮：help 按钮，点击后跳转到游戏页面
-        button2 = Button(678, 600, 402, 250, BUTTON_HELP_PATH, "Go to Game", go_to_game_page, self)
+        button2 = Button(678, 600, 402, 250, BUTTON_HELP_PATH, "Go to Game", go_to_help_page, self)
 
         button1.draw(self.screen)
         button2.draw(self.screen)
