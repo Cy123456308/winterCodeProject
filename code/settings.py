@@ -1,0 +1,39 @@
+from pygame.math import Vector2
+# screen
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 900
+COLOR_WIDTH = 32
+
+# 显示路径
+
+# 图片
+GRAPHICS_PATH = "./graphics/"
+
+BACKGROUND_PATH = GRAPHICS_PATH + "背景/"
+BACKGROUND_BEGIN_PATH = BACKGROUND_PATH + "起始背景.jpg"
+BACKGROUND_FIGHT_PATH = BACKGROUND_PATH + "战斗界面.jpg"  
+BACKGROUND_FAIL_PATH = BACKGROUND_PATH + "战败界面.jpg"
+BACKGROUND_SUCCESS_PATH = BACKGROUND_PATH + "通关界面.jpg"
+BACKGROUND_HELP_PATH = BACKGROUND_PATH + "帮助界面.jpg"
+
+ROLE_PATH = GRAPHICS_PATH + "角色/"
+TEST_ROLE_PATH = ROLE_PATH + "image.png"
+ALICE_PATH = ROLE_PATH + "角色_爱丽丝.png"
+MOMOI_PATH = ROLE_PATH + "角色_桃.png"
+MIDORI_PATH = ROLE_PATH + "角色_绿.png"
+YUZU_PATH = ROLE_PATH + "角色_柚子.png"
+YUKARI_PATH = ROLE_PATH + "角色_优香.png"
+TOKI_PATH = ROLE_PATH + "角色_时.png"
+SHIRONO_PATH = ROLE_PATH + "角色_白子.png"
+MIKA_PATH = ROLE_PATH + "角色_未花.png"
+
+BUTTON_PATH = GRAPHICS_PATH + "按键/"
+BUTTON_HELP_PATH = BUTTON_PATH + "查看帮助.png"
+BUTTON_START_PATH = BUTTON_PATH + "开始冒险.png"
+
+TITLE_PATH = GRAPHICS_PATH + "艺术字/"
+TITLE_START_1 = TITLE_PATH + "基沃托斯.png"
+TITLE_START_2 = TITLE_PATH + "扫除大作战.png"
+
+# 音乐
+AUDIO_PATH = "./audio/"
