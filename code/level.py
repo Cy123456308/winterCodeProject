@@ -12,7 +12,7 @@ class Level:
         self.setup()
 
     def setup(self):
-        self.player = Player((600,500), self.all_sprites)
+        self.player = Player((640,500), self.all_sprites)
         
     def run(self,dt):
         self.display_surface.blit(pygame.image.load(BACKGROUND_FIGHT_PATH),(0,0))
