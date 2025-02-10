@@ -37,5 +37,15 @@ TITLE_PATH = GRAPHICS_PATH + "艺术字/"
 TITLE_START_1 = TITLE_PATH + "基沃托斯.png"
 TITLE_START_2 = TITLE_PATH + "扫除大作战.png"
 
+ENEMY_PATH = GRAPHICS_PATH + "敌人/"
+DRONE_PATH_1 = ENEMY_PATH + "无人机1.png"
+DRONE_PATH_2 = ENEMY_PATH + "无人机2.png"
+DRONE_PATH_3 = ENEMY_PATH + "无人机3.png"
+DRONE_PATH_4 = ENEMY_PATH + "无人机4.png"
+ROBOT_1 = ENEMY_PATH + "机器人1.png"
+ROBOT_2 = ENEMY_PATH + "机器人2.png"
+ROBOT_3 = ENEMY_PATH + "机器人3.png"
+ROBOT_4 = ENEMY_PATH + "机器人4.png"
+
 # 音乐
 AUDIO_PATH = "./audio/"
