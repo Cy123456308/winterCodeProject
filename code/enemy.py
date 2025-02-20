@@ -25,7 +25,8 @@ class Enemy(pygame.sprite.Sprite):
 
 # 射击型敌人
 class Drone(Enemy):
-    def __init__(self, target_pos, type, group):
+    def __init__(self, target_pos, type, group, bulletGruop):
+        self.health = 100
         self.type = type
         # 加载图像
         if type %4 == 1:
@@ -60,6 +61,7 @@ class Drone(Enemy):
         self.shoot_cooldown = 1.0     # 射击间隔
         self.last_shot_time = 0
         self.bullets = pygame.sprite.Group()
+        self.enemy_bullets_group = bulletGruop  # 存储敌人子弹组
 
     def update(self, dt):
         # 第一阶段：移动到目标位置
@@ -105,12 +107,18 @@ class Drone(Enemy):
             self.rect.centery + 20,  # 从底部下方发射
             10, 10, BULLET_PATH_2, 
             800, (0, 1),  # 方向向下
-            group=self.group
+            group=[self.group, self.enemy_bullets_group]
         )
         self.bullets.add(bullet)
+    
+    def take_damage(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            self.kill()
 
 class Robot(Enemy):
     def __init__(self, start_point, end_point, type, group, speed=0.5):
+        self.health = 200
         """
         :param start_point: 起点坐标 (x, y)
         :param end_point:   终点坐标 (x, y)
@@ -166,3 +174,8 @@ class Robot(Enemy):
         # 利用线性插值计算当前位置
         self.pos = self.start_point.lerp(self.end_point, self.progress)
         self.rect.center = (int(self.pos.x), int(self.pos.y))
+    
+    def take_damage(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            self.kill()

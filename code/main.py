@@ -1,4 +1,5 @@
 import pygame, sys
+from CollisionManager import CollisionManager
 from settings import *
 from player import Player
 from level import Level
@@ -67,7 +68,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
             dt = self.clock.tick() / 1000
             self.level.run(dt)
             pygame.display.update()
