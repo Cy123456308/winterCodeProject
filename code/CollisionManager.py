@@ -6,12 +6,15 @@ class CollisionManager:
                  player, 
                  enemies_group, 
                  player_bullets_group, 
-                 enemy_bullets_group
+                 enemy_bullets_group,
+                 playerATK
                 ):
         self.player = player
         self.enemies = enemies_group
         self.player_bullets = player_bullets_group
         self.enemy_bullets = enemy_bullets_group
+        self.playerATK = playerATK
+        self.enemyATK = 10
     
     def check_collisions(self):
         # 玩家与敌方子弹碰撞
@@ -22,7 +25,8 @@ class CollisionManager:
             collided=pygame.sprite.collide_mask  # 80%重叠视为碰撞
         )
         if player_hit:
-            self.player.take_damage(len(player_hit))
+            self.player.take_damage(len(player_hit) * self.enemyATK)
+            #print(f"玩家血量：{self.player.health}")
         
         # 敌方与玩家子弹碰撞
         enemies_hit = pygame.sprite.groupcollide(
@@ -33,4 +37,5 @@ class CollisionManager:
             collided=pygame.sprite.collide_mask  # 精确碰撞检测
         )
         for enemy, bullets in enemies_hit.items():
-            enemy.take_damage(len(bullets))
+            enemy.take_damage(len(bullets) * self.playerATK)
+            #print(f"敌人血量：{enemy.health}")

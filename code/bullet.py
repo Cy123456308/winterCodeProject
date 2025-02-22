@@ -1,12 +1,13 @@
 import pygame
 
 class Bullet(pygame.sprite.Sprite): 
-    def __init__(self, x, y, width, height, image_path, speed, direction, group=None):
+    def __init__(self, x, y, width, height, image_path, speed, direction, atk, group=None):
         super().__init__(group)
         self.rect = pygame.Rect(x, y, width, height)
         self.image = pygame.image.load(image_path).convert_alpha()  # 加载图像
         self.image = pygame.transform.scale(self.image, (width, height))  # 调整图像大小
         self.speed = speed
+        self.ATK = atk
         self.direction = direction
 
     def draw(self, surface):

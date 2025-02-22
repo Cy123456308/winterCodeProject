@@ -4,19 +4,23 @@ from bullet import Bullet
 import time
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, bullet_group):
+    def __init__(self, pos, group, bullet_group, role):
         super().__init__(group)
 
-        self.image = pygame.image.load(SHIRONO_PATH).convert_alpha()
-        self.rect = self.image.get_rect(center = pos)
-        self.screen = pygame.display.get_surface()
-
         self.direction = pygame.math.Vector2()
-        self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 400
-        self.health = 400  # 血量属性
+        
+        if role == 1:
+            self.image = pygame.image.load(SHIRONO_PATH).convert_alpha()
+            self.speed = 400
+            self.health = 400  # 血量属性
+            self.ATK = 15  # 攻击力属性
+            self.bullet_counts = 30
+            self.shootSpeed = 0.05
 
         self.group = group
+        self.rect = self.image.get_rect(center = pos)
+        self.pos = pygame.math.Vector2(self.rect.center)
+        self.screen = pygame.display.get_surface()
         
         self.player_bullet_group = bullet_group
         self.can_shoot = True
@@ -25,8 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.bullet_wait_time = 0
         self.bullets = pygame.sprite.Group()
         self.bullet_waiting = False
-        self.bullet_counts = 30
-        self.shootSpeed = 0.2
+
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -46,7 +49,7 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
         if keys[pygame.K_SPACE] and self.can_shoot and not self.reloading:  # 只有在可以射击且不在装弹时才发射
-            bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 10, 10, BULLET_PATH_1, 1000, (0, -1), group=(self.group, self.player_bullet_group))
+            bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 10, 10, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
             self.bullets.add(bullet)
             self.can_shoot = False
             self.bullet_waiting = True
@@ -92,5 +95,5 @@ class Player(pygame.sprite.Sprite):
         self.move(dt)
         self.bullet_wait(self.shootSpeed)
         self.reload()  # 调用装弹方法
-       
+
 

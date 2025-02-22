@@ -55,10 +55,11 @@ class Drone(Enemy):
         self.oscillation_range = 80  # 左右摆动范围
         self.oscillation_speed = 1.5  # 摆动速度（弧度/秒）
         self.oscillation_phase = 0    # 摆动相位
+        self.ATK = 10
         
         # 射击参数
         self.can_shoot = False
-        self.shoot_cooldown = 1.0     # 射击间隔
+        self.shoot_cooldown = 0.4     # 射击间隔
         self.last_shot_time = 0
         self.bullets = pygame.sprite.Group()
         self.enemy_bullets_group = bulletGruop  # 存储敌人子弹组
@@ -98,7 +99,6 @@ class Drone(Enemy):
                 self.last_shot_time = time.time()
 
         # 更新子弹
-        self.bullets.update(dt)
 
     def shoot(self):
         """向下发射子弹"""
@@ -107,6 +107,7 @@ class Drone(Enemy):
             self.rect.centery + 20,  # 从底部下方发射
             10, 10, BULLET_PATH_2, 
             800, (0, 1),  # 方向向下
+            self.ATK, # 攻击力
             group=[self.group, self.enemy_bullets_group]
         )
         self.bullets.add(bullet)

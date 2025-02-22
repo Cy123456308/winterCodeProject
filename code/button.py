@@ -6,6 +6,7 @@ class Button:
         self.image = pygame.image.load(image_path).convert_alpha()  # 加载图像
         self.image = pygame.transform.scale(self.image, (width, height))  # 调整图像大小
         self.action = action  # 按钮点击后执行的动作
+        self.text = text  # 按钮上的文字
         self.actionSource = actionSource
 
     def draw(self, surface):
