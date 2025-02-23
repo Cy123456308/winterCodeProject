@@ -5,18 +5,37 @@ class CollisionManager:
     def __init__(self, 
                  player, 
                  enemies_group, 
+                 shields_group,
                  player_bullets_group, 
                  enemy_bullets_group,
                  playerATK
                 ):
         self.player = player
         self.enemies = enemies_group
+        self.shields = shields_group
         self.player_bullets = player_bullets_group
         self.enemy_bullets = enemy_bullets_group
         self.playerATK = playerATK
         self.enemyATK = 10
     
     def check_collisions(self):
+        # 子弹与掩体碰撞
+        shield_hit_player = pygame.sprite.groupcollide(
+            self.shields, 
+            self.player_bullets, 
+            dokilla=False,  
+            dokillb=True,  # 碰撞后移除子弹
+            collided=pygame.sprite.collide_mask  
+        )
+        
+        shield_hit_enemy = pygame.sprite.groupcollide(
+            self.shields, 
+            self.enemy_bullets, 
+            dokilla=False,  
+            dokillb=True,  # 碰撞后移除子弹
+            collided=pygame.sprite.collide_mask  
+        )
+            
         # 玩家与敌方子弹碰撞
         player_hit = pygame.sprite.spritecollide(
             self.player, 

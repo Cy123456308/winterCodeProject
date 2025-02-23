@@ -32,6 +32,7 @@ def go_to_game_page(self):
     
 def go_back_start_page(self):
     self.button_back_clicked = True
+    
 class Game:
     def __init__(self):
         pygame.init()

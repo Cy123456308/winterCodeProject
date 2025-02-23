@@ -26,7 +26,8 @@ class Enemy(pygame.sprite.Sprite):
 # 射击型敌人
 class Drone(Enemy):
     def __init__(self, target_pos, type, group, bulletGruop):
-        self.health = 100
+        self.max_health = 100
+        self.health = self.max_health
         self.type = type
         # 加载图像
         if type %4 == 1:
@@ -44,10 +45,8 @@ class Drone(Enemy):
 
         # 初始位置在屏幕顶部中间
         self.rect = self.image.get_rect(center=target_pos)
-        if type <= 4:
-            start_pos = (target_pos[0], 0)
-        else:
-            start_pos = target_pos
+        start_pos = (target_pos[0], 0)
+
         super().__init__(start_pos, group)
         
         # 移动参数
@@ -63,27 +62,47 @@ class Drone(Enemy):
         self.last_shot_time = 0
         self.bullets = pygame.sprite.Group()
         self.enemy_bullets_group = bulletGruop  # 存储敌人子弹组
+        
+    def auto_move(self):
+        if self.direction == 'right':
+            self.rect.right += self.speed
+        elif self.direction == 'left':
+            self.rect.right -= self.speed
+
+        if self.rect.right >  SCREEN_WIDTH:
+            self.direction = 'left'
+        elif self.rect.right < 0:
+            self.direction = 'right'
+
+        self.rect.bottom += self.speed
+
+    def draw_health_bar(self, surface):
+    # 血条的尺寸可根据敌人图像宽度或自定义
+        bar_width = self.rect.width * 0.5
+        bar_height = 5
+        # 计算血条填充宽度，按比例显示剩余生命值
+        fill_width = int((self.health / self.max_health) * bar_width)
+    
+        # 血条背景（灰色边框）
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, bar_width, bar_height)
+        pygame.draw.rect(surface, (60, 60, 60), background_rect)
+        current_ratio = self.health / self.max_health
+
+        # 血条填充（绿色）
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, fill_width, bar_height)
+        color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
+
+        pygame.draw.rect(surface, color, fill_rect)
 
     def update(self, dt):
         # 第一阶段：移动到目标位置
         if not hasattr(self, '_reached_target'):
-            if self.type <= 4:
-                move_vector = self.target_pos - self.pos
-                if move_vector.length() > 2:
-                    move_vector = move_vector.normalize()
-                    self.pos += move_vector * self.speed * dt
-                    self.rect.center = self.pos
-                else:
-                    self._reached_target = True  # 标记到达目标位置
-                    self.oscillation_center = self.pos.copy()  # 记录摆动中心
-                    self.can_shoot = True
-                    self.last_shot_time = time.time()
-            else:
-                self.oscillation_center = self.pos.copy()  # 记录摆动中心
-                self._reached_target = True  # 标记到达目标位置
-                self.oscillation_center = self.pos.copy()  # 记录摆动中心
-                self.can_shoot = True
-                self.last_shot_time = time.time()
+            self.oscillation_center = self.pos.copy()  # 记录摆动中心
+            self._reached_target = True  # 标记到达目标位置
+            self.oscillation_center = self.pos.copy()  # 记录摆动中心
+            self.can_shoot = True
+            self.last_shot_time = time.time()
+            
                 
         # 第二阶段：左右摆动并射击
         else:
@@ -119,7 +138,9 @@ class Drone(Enemy):
 
 class Robot(Enemy):
     def __init__(self, start_point, end_point, type, group, speed=0.5):
-        self.health = 200
+        self.max_health = 200
+        self.health = self.max_health
+
         """
         :param start_point: 起点坐标 (x, y)
         :param end_point:   终点坐标 (x, y)
@@ -156,7 +177,25 @@ class Robot(Enemy):
         self.speed = speed
         # 运动方向，1 表示从起点向终点运动，-1 表示反方向
         self.direction = 1
+        
+    def draw_health_bar(self, surface):
+    # 血条的尺寸可根据敌人图像宽度或自定义
+        bar_width = self.rect.width * 0.5
+        bar_height = 5
+        # 计算血条填充宽度，按比例显示剩余生命值
+        fill_width = int((self.health / self.max_health) * bar_width)
+    
+        # 血条背景（灰色边框）
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, bar_width, bar_height)
+        pygame.draw.rect(surface, (60, 60, 60), background_rect)
+        current_ratio = self.health / self.max_health
 
+        # 血条填充（绿色）
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, fill_width, bar_height)
+        color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
+
+        pygame.draw.rect(surface, color, fill_rect)
+        
     def update(self, dt):
         """
         dt: 帧间时间间隔（单位秒）
