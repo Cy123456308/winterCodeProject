@@ -15,7 +15,6 @@ def start_screen(self):
     titleUp.draw(self.screen)
     titleDown.draw(self.screen)
 
-
 def help_screen(self):
     background = pygame.image.load(BACKGROUND_HELP_PATH)
     self.screen.blit(background, (0, 0))
@@ -32,6 +31,10 @@ def go_to_game_page(self):
     
 def go_back_start_page(self):
     self.button_back_clicked = True
+
+def go_to_countdown_1(self):
+    self.roleNum = 1
+    self.button_select_clicked = True
     
 class Game:
     def __init__(self):
@@ -90,6 +93,13 @@ class Game:
     
     def select(self):
         select_screen(self)
+        self.buttons = []
+        selectButton1 = Button(678, 600, 402, 250, SELECT_SHIRONO_PATH, "Select_Role", go_to_countdown_1, self)
+        self.buttons.append(selectButton1)
+        for button in self.buttons:
+            button.draw(self.screen)
+        self.button_select_clicked = False
+        self.roleNum = 0
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -97,10 +107,15 @@ class Game:
                     sys.exit()
 
                 # 监控鼠标点击事件
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:  # 检测 Enter 键
-                        self.level = Level(1)
-                        self.countDown()
+                if event.type == pygame.MOUSEBUTTONDOWN and not self.button_select_clicked:   
+                    # 获取鼠标当前位置
+                    mouse_pos = pygame.mouse.get_pos()
+                    selectButton1.is_clicked(mouse_pos, pygame.mouse.get_pressed())
+            if self.button_select_clicked:
+                self.button_select_clicked = False
+                self.buttons = []
+                self.level = Level(self.roleNum)
+                self.countDown()
             pygame.display.update()
             
     def help(self): # 帮助界面

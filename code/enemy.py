@@ -84,12 +84,12 @@ class Drone(Enemy):
         fill_width = int((self.health / self.max_health) * bar_width)
     
         # 血条背景（灰色边框）
-        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, bar_width, bar_height)
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
         pygame.draw.rect(surface, (60, 60, 60), background_rect)
         current_ratio = self.health / self.max_health
 
         # 血条填充（绿色）
-        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, fill_width, bar_height)
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
         color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
 
         pygame.draw.rect(surface, color, fill_rect)
@@ -186,12 +186,12 @@ class Robot(Enemy):
         fill_width = int((self.health / self.max_health) * bar_width)
     
         # 血条背景（灰色边框）
-        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, bar_width, bar_height)
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
         pygame.draw.rect(surface, (60, 60, 60), background_rect)
         current_ratio = self.health / self.max_health
 
         # 血条填充（绿色）
-        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top - 20, fill_width, bar_height)
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
         color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
 
         pygame.draw.rect(surface, color, fill_rect)
