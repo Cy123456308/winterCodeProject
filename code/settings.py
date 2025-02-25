@@ -92,6 +92,11 @@ GIRL_4 = ENEMY_PATH + "不良4.png"
 
 # 音乐
 AUDIO_PATH = "./audio/"
+AUDIO_START_PATH = AUDIO_PATH + "01. Constant Moderato.mp3"
+AUDIO_SELECT_PATH = AUDIO_PATH + "03. Connected Sky.mp3"
+AUDIO_HELP_PATH = AUDIO_PATH + "06. MX Adventure.mp3"
+AUDIO_FAIL_PATH = AUDIO_PATH + "07. Fade Out.mp3"
+AUDIO_FIGHT_PATH = AUDIO_PATH + "06. Endless Carnival.mp3"
 
 # 字体
 FONT_PATH = "./font/"

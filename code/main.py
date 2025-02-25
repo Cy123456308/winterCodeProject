@@ -14,6 +14,8 @@ from selectoption import Option
 def start_screen(self):
     background = pygame.image.load(BACKGROUND_BEGIN_PATH)
     self.screen.blit(background, (0, 0))
+    pygame.mixer.music.load(AUDIO_START_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.play()  # 播放音乐
     title = Title(300, 0, 906, 250, TITLE_START_3)
     title.draw(self.screen)
     #titleUp = Title(625, 75, 452, 99, TITLE_START_1)
@@ -24,10 +26,14 @@ def start_screen(self):
 def help_screen(self):
     background = pygame.image.load(BACKGROUND_HELP_PATH)
     self.screen.blit(background, (0, 0))
+    pygame.mixer.music.load(AUDIO_HELP_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.play()  # 播放音乐
 
 def select_screen(self):
     background = pygame.image.load(BACKGROUND_SELECT_PATH)
     self.screen.blit(background, (0, 0))
+    pygame.mixer.music.load(AUDIO_SELECT_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.play()  # 播放音乐
 
 def end_screen(self):
     ranSum = random.randint(1, 6)
@@ -44,6 +50,8 @@ def end_screen(self):
     elif ranSum % 6 == 0:
         background = pygame.image.load(BACKGROUND_END_PATH_5)
     self.screen.blit(background, (0, 0))
+    pygame.mixer.music.load(AUDIO_FAIL_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.play()  # 播放音乐
     
 def pause_screen(self):
     self.pause()
@@ -84,6 +92,7 @@ class Game:
     def __init__(self):
         settings.ending = False
         pygame.init()
+        pygame.mixer.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, COLOR_WIDTH)
         pygame.display.set_caption('小游戏')
         self.clock = pygame.time.Clock()
@@ -181,6 +190,8 @@ class Game:
             Option(640, 550, 572, 50, MIDORI_LINES, go_to_countdown_4, self),
             Option(640, 650, 572, 50, YUZU_LINES, go_to_countdown_5, self),
             Option(640, 750, 572, 50, YUKARI_LINES, go_to_countdown_6, self),
+            Option(640, 750, 572, 50, YUKARI_LINES, go_to_countdown_6, self),
+            Option(640, 850, 572, 50, "返回初始界面", go_back_start_page, self),
         ]
     
         self.button_select_clicked = False
@@ -205,7 +216,12 @@ class Game:
                 self.buttons = []
                 self.level = Level(self.roleNum)
                 self.countDown()
-
+                
+            elif self.button_back_clicked:
+                self.button_back_clicked = False
+                self.buttons = []
+                self.start()
+                
             pygame.display.update()
             
     def help(self): # 帮助界面
@@ -261,6 +277,8 @@ class Game:
             pygame.display.update()
 
     def run(self):
+        pygame.mixer.music.load(AUDIO_FIGHT_PATH)  # 替换为你的音乐文件路径
+        pygame.mixer.music.play()  # 播放音乐
         while True:
             if settings.ending:
                 self.end()
@@ -288,15 +306,15 @@ class Game:
     def end(self):
         end_screen(self)
         text = f"游戏结束！本次你的得分为: {presentMark}, 之前你的最高分为: {hightstMark}"
-        self.font = pygame.font.Font(FONT_SONGTI, 32)  # 字体设置
-        text_surface = self.font.render(text, True, (200, 200, 200))
+        self.font = pygame.font.Font(FONT_FANGZHENGXIETI, 48)  # 字体设置
+        text_surface = self.font.render(text, True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(640,200))
         self.screen.blit(text_surface, text_rect)
         if presentMark >= hightstMark:
             text = f"恭喜你创造了新纪录！"
-            self.font = pygame.font.Font(FONT_SONGTI, 32)  # 字体设置
-            text_surface = self.font.render(text, True, (200, 200, 200))
-            text_rect = text_surface.get_rect(center=(640,320))
+            self.font = pygame.font.Font(FONT_SONGTI, 48)  # 字体设置
+            text_surface = self.font.render(text, True, (0, 0, 0))
+            text_rect = text_surface.get_rect(center=(640,360))
             self.screen.blit(text_surface, text_rect)
         settings.hightstMark = max(settings.hightstMark, settings.presentMark)
         settings.presentMark = 0
