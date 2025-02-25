@@ -4,20 +4,87 @@ from bullet import Bullet
 import time
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, bullet_group, role):
+    def __init__(self, pos, group, bullet_group, penetrate_bullets_group, role):
         super().__init__(group)
 
         self.direction = pygame.math.Vector2()
-        
+        self.enhanceTime = 5
+        self.enhanceStart = 0
+
         if role == 1:
             self.image = pygame.image.load(SHIRONO_PATH).convert_alpha()
             self.speed = 400
-            self.health = 400  # 血量属性
-            self.ATK = 15  # 攻击力属性
+            self.maxHealth = 400  
+            self.health = self.maxHealth
+            self.ATK = 15 
+            self.bullet_counts = 40
+            self.shootSpeed = 0.05
+            self.penetrate = False
+            self.canMultipleBullet = False
+            self.canEnhance = False
+
+        elif role == 2:
+            self.image = pygame.image.load(ALICE_PATH).convert_alpha()
+            self.speed = 400
+            self.maxHealth = 320  
+            self.health = self.maxHealth
+            self.ATK = 20 
+            self.bullet_counts = 5
+            self.shootSpeed = 0.3
+            self.penetrate = True
+            self.canMultipleBullet = False
+            self.canEnhance = False
+
+        elif role == 3:
+            self.image = pygame.image.load(MOMOI_PATH).convert_alpha()
+            self.speed = 400
+            self.maxHealth = 240  
+            self.health = self.maxHealth
+            self.ATK = 12 
             self.bullet_counts = 30
             self.shootSpeed = 0.05
+            self.canMultipleBullet = True
+            self.penetrate = False
+            self.canEnhance = False
+
+        elif role == 4:
+            self.image = pygame.image.load(MIDORI_PATH).convert_alpha()
+            self.speed = 400
+            self.maxHealth = 240  
+            self.health = self.maxHealth
+            self.ATK = 27
+            self.bullet_counts = 20
+            self.shootSpeed = 0.05
+            self.penetrate = False
+            self.canMultipleBullet = False
+            self.canEnhance = False            
+            
+        elif role == 5:
+            self.image = pygame.image.load(YUZU_PATH).convert_alpha()
+            self.speed = 500
+            self.maxHealth = 200  
+            self.health = self.maxHealth
+            self.ATK = 40 
+            self.bullet_counts = 5
+            self.shootSpeed = 0.2
+            self.penetrate = False
+            self.canMultipleBullet = False
+            self.canEnhance = True
+            
+        elif role == 6:
+            self.image = pygame.image.load(YUKARI_PATH).convert_alpha()
+            self.speed = 300
+            self.maxHealth = 3000
+            self.health = self.maxHealth
+            self.ATK = 5 
+            self.bullet_counts = 30
+            self.shootSpeed = 0.05
+            self.penetrate = False
+            self.canMultipleBullet = False
+            self.canEnhance = False
 
         self.group = group
+        self.penetrate_bullets_group = penetrate_bullets_group
         self.rect = self.image.get_rect(center = pos)
         self.pos = pygame.math.Vector2(self.rect.center)
         self.screen = pygame.display.get_surface()
@@ -49,8 +116,21 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
         if keys[pygame.K_SPACE] and self.can_shoot and not self.reloading:  # 只有在可以射击且不在装弹时才发射
-            bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 10, 10, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
-            self.bullets.add(bullet)
+            if not self.penetrate:
+                if not self.canMultipleBullet:
+                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    self.bullets.add(bullet)
+                else:
+                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    self.bullets.add(bullet)
+                    bullet = Bullet(self.rect.centerx - 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (-1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    self.bullets.add(bullet)
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    self.bullets.add(bullet)
+            else:
+                bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 64, 182, BULLET_PATH_ALICE, 1000, (0, -1), self.ATK, group=[self.group, self.penetrate_bullets_group])
+                self.bullets.add(bullet)
+            
             self.can_shoot = False
             self.bullet_waiting = True
             self.bullet_wait_time = time.time()
@@ -90,7 +170,32 @@ class Player(pygame.sprite.Sprite):
         if self.health <= 0:
             self.kill()
 
+    def draw_health_bar(self, surface):
+        
+    # 血条的尺寸可根据敌人图像宽度或自定义
+        bar_width = self.rect.width * 0.5
+        bar_height = 5
+        # 计算血条填充宽度，按比例显示剩余生命值
+        fill_width = int((self.health / self.maxHealth) * bar_width)
+    
+        # 血条背景（灰色边框）
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
+        pygame.draw.rect(surface, (60, 60, 60), background_rect)
+        current_ratio = self.health / self.maxHealth
+
+        # 血条填充（绿色）
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
+        color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
+
+        pygame.draw.rect(surface, color, fill_rect)
+        
     def update(self, dt):
+        if self.canEnhance and self.enhanceStart >= self.enhanceTime:
+            if self.ATK < 100:
+                self.ATK += 5
+            self.health += 20
+            self.enhanceStart -= self.enhanceTime
+        
         self.input()
         self.move(dt)
         self.bullet_wait(self.shootSpeed)

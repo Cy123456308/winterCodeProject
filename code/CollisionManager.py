@@ -6,7 +6,8 @@ class CollisionManager:
                  player, 
                  enemies_group, 
                  shields_group,
-                 player_bullets_group, 
+                 player_bullets_group,
+                 player_penetrate_bullets_group,
                  enemy_bullets_group,
                  playerATK
                 ):
@@ -14,6 +15,7 @@ class CollisionManager:
         self.enemies = enemies_group
         self.shields = shields_group
         self.player_bullets = player_bullets_group
+        self.player_penetrate_bullets_group = player_penetrate_bullets_group
         self.enemy_bullets = enemy_bullets_group
         self.playerATK = playerATK
         self.enemyATK = 10
@@ -53,8 +55,29 @@ class CollisionManager:
             self.player_bullets,
             dokilla=False,  # 不自动移除敌人
             dokillb=True,   # 自动移除子弹
-            collided=pygame.sprite.collide_mask  # 精确碰撞检测
+            collided=pygame.sprite.collide_mask  
         )
         for enemy, bullets in enemies_hit.items():
             enemy.take_damage(len(bullets) * self.playerATK)
             #print(f"敌人血量：{enemy.health}")
+
+        enemy_penetrate_hit = pygame.sprite.groupcollide(
+            self.enemies,
+            self.player_penetrate_bullets_group,
+            dokilla=False,  
+            dokillb=False,  
+            collided=pygame.sprite.collide_mask  
+        )
+        for enemy, bullets in enemy_penetrate_hit.items():
+            enemy.take_damage(len(bullets) * self.playerATK)
+        if(self.player.canEnhance):
+            self.player.enhanceStart += len(bullets)
+            
+        player_enemies_hit = pygame.sprite.spritecollide(
+            self.player, 
+            self.enemies, 
+            dokill=False,  # 碰撞后移除子弹
+            collided=pygame.sprite.collide_mask  # 80%重叠视为碰撞
+        )
+        if player_enemies_hit:
+            self.player.take_damage(len(player_hit) * 30)

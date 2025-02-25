@@ -6,14 +6,18 @@ from player import Player
 from level import Level
 from button import Button
 from title import Title
+from rolechoose import RoleChoose
+from selectoption import Option
 
 def start_screen(self):
     background = pygame.image.load(BACKGROUND_BEGIN_PATH)
     self.screen.blit(background, (0, 0))
-    titleUp = Title(625, 75, 452, 99, TITLE_START_1)
-    titleDown = Title(551, 174, 600, 113, TITLE_START_2)
-    titleUp.draw(self.screen)
-    titleDown.draw(self.screen)
+    title = Title(300, 0, 906, 250, TITLE_START_3)
+    title.draw(self.screen)
+    #titleUp = Title(625, 75, 452, 99, TITLE_START_1)
+    #titleDown = Title(551, 174, 600, 113, TITLE_START_2)
+    #titleUp.draw(self.screen)
+    #titleDown.draw(self.screen)
 
 def help_screen(self):
     background = pygame.image.load(BACKGROUND_HELP_PATH)
@@ -35,7 +39,26 @@ def go_back_start_page(self):
 def go_to_countdown_1(self):
     self.roleNum = 1
     self.button_select_clicked = True
-    
+
+def go_to_countdown_2(self):
+    self.roleNum = 2
+    self.button_select_clicked = True
+
+def go_to_countdown_3(self):
+    self.roleNum = 3
+    self.button_select_clicked = True
+
+def go_to_countdown_4(self):
+    self.roleNum = 4
+    self.button_select_clicked = True
+
+def go_to_countdown_5(self):
+    self.roleNum = 5
+    self.button_select_clicked = True
+
+def go_to_countdown_6(self):
+    self.roleNum = 6
+    self.button_select_clicked = True
 class Game:
     def __init__(self):
         pygame.init()
@@ -45,6 +68,12 @@ class Game:
         self.button_help_clicked = False
         self.button_back_clicked = False
         self.buttons = []
+        
+        # 加载自定义鼠标
+        cursor_image = pygame.image.load(MOUSE_PATH_3).convert_alpha()  # 支持透明通道
+        hotspot = (cursor_image.get_width() // 4, cursor_image.get_height() // 4)
+        custom_cursor = pygame.cursors.Cursor(hotspot, cursor_image)
+        pygame.mouse.set_cursor(custom_cursor)
         
     def start(self):
         start_screen(self)
@@ -56,11 +85,20 @@ class Game:
 
         self.buttons.append(button1)
         self.buttons.append(button2)    
-        
-        for button in self.buttons:
-            button.draw(self.screen)
-                
+
         while True:
+            # 获取鼠标当前位置
+            mouse_pos = pygame.mouse.get_pos()
+
+            # 更新所有按钮的悬停状态
+            for button in self.buttons:
+                button.update_hover_state(mouse_pos)
+
+            # 绘制所有按钮
+            for button in self.buttons:
+                button.draw(self.screen)
+
+            # 事件处理
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -68,64 +106,115 @@ class Game:
 
                 # 监控鼠标点击事件
                 if event.type == pygame.MOUSEBUTTONDOWN and not self.button_help_clicked:
-                    # 获取鼠标当前位置
-                    mouse_pos = pygame.mouse.get_pos()
+                    # 检测按钮点击
                     button1.is_clicked(mouse_pos, pygame.mouse.get_pressed())
                     button2.is_clicked(mouse_pos, pygame.mouse.get_pressed())
+
+            # 如果点击了帮助按钮，跳转到帮助页面
             if self.button_help_clicked:
                 self.button_help_clicked = False
                 self.buttons = []
                 self.help()
+
+            # 更新显示
             pygame.display.update()
     
     def countDown(self):
         countdown_numbers = [3, 2, 1]
         font = pygame.font.Font(FONT_ALGER_PATH, 200)
+
+    # 渲染倒计时 3, 2, 1
         for num in countdown_numbers:
             background = pygame.image.load(BACKGROUND_BEGIN_PATH)
-            self.screen.blit(background, (0, 0))        # 渲染倒计时数字
-            text = font.render(str(num), True, (0,0,0))
-            self.screen.blit(text, (540, 350))
+            self.screen.blit(background, (0, 0))  # 渲染背景
+            text = font.render(str(num), True, (0, 0, 0))  # 渲染数字
+            self.screen.blit(text, (540, 350))  # 显示数字
             pygame.display.flip()
             time.sleep(1)  # 等待 1 秒钟
-        # 倒计时结束，跳转到另一个页面
+
+    # 渲染 "Go!" 字符
+        background = pygame.image.load(BACKGROUND_BEGIN_PATH)
+        self.screen.blit(background, (0, 0))  # 渲染背景
+        text = font.render("Go!", True, (0, 0, 0))  # 渲染 "Go!" 文本
+        self.screen.blit(text, (440, 350))  # 显示 "Go!"
+        pygame.display.flip()
+        time.sleep(1)  # 等待 1 秒钟
+
+    # 倒计时结束，跳转到另一个页面
         self.run()
     
     def select(self):
         select_screen(self)
-        self.buttons = []
-        selectButton1 = Button(678, 600, 402, 250, SELECT_SHIRONO_PATH, "Select_Role", go_to_countdown_1, self)
-        self.buttons.append(selectButton1)
-        for button in self.buttons:
-            button.draw(self.screen)
+        self.buttons = [
+            Option(640, 250, 572, 50, SHIRONO_LINES, go_to_countdown_1, self),
+            Option(640, 350, 572, 50, ALICE_LINES, go_to_countdown_2, self),
+            Option(640, 450, 572, 50, MOMOI_LINES, go_to_countdown_3, self),
+            Option(640, 550, 572, 50, MIDORI_LINES, go_to_countdown_4, self),
+            Option(640, 650, 572, 50, YUZU_LINES, go_to_countdown_5, self),
+            Option(640, 750, 572, 50, YUKARI_LINES, go_to_countdown_6, self),
+        ]
+    
         self.button_select_clicked = False
         self.roleNum = 0
+
         while True:
+            for btn in self.buttons:
+                btn.draw(self.screen)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-                # 监控鼠标点击事件
-                if event.type == pygame.MOUSEBUTTONDOWN and not self.button_select_clicked:   
-                    # 获取鼠标当前位置
+                if event.type == pygame.MOUSEBUTTONDOWN and not self.button_select_clicked:
                     mouse_pos = pygame.mouse.get_pos()
-                    selectButton1.is_clicked(mouse_pos, pygame.mouse.get_pressed())
+                    for btn in self.buttons:
+                        btn.is_clicked(mouse_pos)
+
             if self.button_select_clicked:
                 self.button_select_clicked = False
                 self.buttons = []
                 self.level = Level(self.roleNum)
                 self.countDown()
+
             pygame.display.update()
             
     def help(self): # 帮助界面
         help_screen(self)
         # 按钮：返回按钮，在帮助界面点击后，跳转回游戏初始界面
-        button3 = Button(439, 600, 402, 250, BUTTON_HELP_PATH, "Go back to Start", go_back_start_page, self)
+        button3 = Button(800, 600, 234, 250, BUTTON_BACK_PATH, "Go back to Start", go_back_start_page, self)
         self.buttons.append(button3)
-        for button in self.buttons:
-            button.draw(self.screen)
+        
+        # 添加文字说明
+        font = pygame.font.Font(FONT_FANGZHENGXIETI, 36)  # 使用默认字体，字号36
+        text_lines = [
+            "本游戏是基于蔚蓝档案素材的射击小游戏",
+            "以下是游玩提示：",
+            "点击“开始冒险”进入角色选择界面",
+            "不同角色有不同的特性，如血量，射速等",
+            "注意所有角色，包括自己和敌人，都有换弹",
+            "选择角色后开始游戏",
+            "注意躲避敌人射出的子弹，观察换弹时机",
+            "同时注意不要碰到游荡的机器人，否则带来大量伤害",
+            "利用掩体作为掩护，保护自己",
+            "通过各个关卡，最后击败最终BOSS即可通关",
+            "还有无尽模式等待您的挑战",
+            "祝您玩得愉快！"
+        ]
+        y_position = 90  # 文字起始Y坐标
+        for line in text_lines:
+            text_surface = font.render(line, True, (0, 0, 0))  # 白色文字
+            text_rect = text_surface.get_rect(center=(self.screen.get_width()//2, y_position))
+            self.screen.blit(text_surface, text_rect)
+            y_position += 40  # 行间距
+
         while True:
+            mouse_pos = pygame.mouse.get_pos()
+            for button in self.buttons:
+                button.update_hover_state(mouse_pos)
+            for button in self.buttons:
+                button.draw(self.screen)
+                
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
