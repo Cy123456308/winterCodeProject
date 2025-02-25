@@ -83,7 +83,7 @@ class Level:
     
     def run(self, dt, paused):
         if not paused and not settings.ending:
-            self.display_surface.blit(pygame.image.load(BACKGROUND_FIGHT_PATH_FINAL), (0, 0))
+            self.display_surface.blit(pygame.image.load(resource_path(BACKGROUND_FIGHT_PATH_FINAL)), (0, 0))
 
             # 累加计时器（dt单位需与设定间隔一致，若 dt 为毫秒则无需转换）
             self.enemy_timer += dt

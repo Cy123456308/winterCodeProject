@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.enhanceStart = 0
 
         if role == 1:
-            self.image = pygame.image.load(SHIRONO_PATH).convert_alpha()
+            self.image = pygame.image.load(resource_path(SHIRONO_PATH)).convert_alpha()
             self.speed = 400
             self.maxHealth = 400  
             self.health = self.maxHealth
@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
             self.canEnhance = False
 
         elif role == 2:
-            self.image = pygame.image.load(ALICE_PATH).convert_alpha()
+            self.image = pygame.image.load(resource_path(ALICE_PATH)).convert_alpha()
             self.speed = 400
             self.maxHealth = 320  
             self.health = self.maxHealth
@@ -38,7 +38,7 @@ class Player(pygame.sprite.Sprite):
             self.canEnhance = False
 
         elif role == 3:
-            self.image = pygame.image.load(MOMOI_PATH).convert_alpha()
+            self.image = pygame.image.load(resource_path(MOMOI_PATH)).convert_alpha()
             self.speed = 400
             self.maxHealth = 240  
             self.health = self.maxHealth
@@ -50,7 +50,7 @@ class Player(pygame.sprite.Sprite):
             self.canEnhance = False
 
         elif role == 4:
-            self.image = pygame.image.load(MIDORI_PATH).convert_alpha()
+            self.image = pygame.image.load(resource_path(MIDORI_PATH)).convert_alpha()
             self.speed = 400
             self.maxHealth = 240  
             self.health = self.maxHealth
@@ -62,7 +62,7 @@ class Player(pygame.sprite.Sprite):
             self.canEnhance = False            
             
         elif role == 5:
-            self.image = pygame.image.load(YUZU_PATH).convert_alpha()
+            self.image = pygame.image.load(resource_path(YUZU_PATH)).convert_alpha()
             self.speed = 500
             self.maxHealth = 200  
             self.health = self.maxHealth
@@ -73,7 +73,7 @@ class Player(pygame.sprite.Sprite):
             self.canMultipleBullet = False
             
         elif role == 6:
-            self.image = pygame.image.load(YUKARI_PATH).convert_alpha()
+            self.image = pygame.image.load(resource_path(YUKARI_PATH)).convert_alpha()
             self.speed = 300
             self.maxHealth = 3000
             self.health = self.maxHealth
@@ -119,21 +119,21 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE] and self.can_shoot and not self.reloading:  # 只有在可以射击且不在装弹时才发射
             if not self.penetrate:
                 if not self.canMultipleBullet:
-                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, resource_path(BULLET_PATH_1), 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
                 else:
-                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, resource_path(BULLET_PATH_1), 400, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
-                    bullet = Bullet(self.rect.centerx - 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (-1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx - 15, self.rect.centery - self.rect.height / 2, 12, 28, resource_path(BULLET_PATH_1), 400, (-1, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
-                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, resource_path(BULLET_PATH_1), 400, (1, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
-                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (2, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, resource_path(BULLET_PATH_1), 400, (2, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
-                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (-2, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, resource_path(BULLET_PATH_1), 400, (-2, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
             else:
-                bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 64, 182, BULLET_PATH_ALICE, 1000, (0, -1), self.ATK, group=[self.group, self.penetrate_bullets_group])
+                bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 64, 182, resource_path(BULLET_PATH_ALICE), 1000, (0, -1), self.ATK, group=[self.group, self.penetrate_bullets_group])
                 self.bullets.add(bullet)
             
             self.can_shoot = False

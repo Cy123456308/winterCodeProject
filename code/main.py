@@ -12,11 +12,11 @@ from rolechoose import RoleChoose
 from selectoption import Option
 
 def start_screen(self):
-    background = pygame.image.load(BACKGROUND_BEGIN_PATH)
+    background = pygame.image.load(resource_path(BACKGROUND_BEGIN_PATH))
     self.screen.blit(background, (0, 0))
-    pygame.mixer.music.load(AUDIO_START_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.load(resource_path(AUDIO_START_PATH))  # 替换为你的音乐文件路径
     pygame.mixer.music.play()  # 播放音乐
-    title = Title(300, 0, 906, 250, TITLE_START_3)
+    title = Title(300, 0, 906, 250, resource_path(TITLE_START_3))
     title.draw(self.screen)
     #titleUp = Title(625, 75, 452, 99, TITLE_START_1)
     #titleDown = Title(551, 174, 600, 113, TITLE_START_2)
@@ -24,33 +24,33 @@ def start_screen(self):
     #titleDown.draw(self.screen)
 
 def help_screen(self):
-    background = pygame.image.load(BACKGROUND_HELP_PATH)
+    background = pygame.image.load(resource_path(BACKGROUND_HELP_PATH))
     self.screen.blit(background, (0, 0))
-    pygame.mixer.music.load(AUDIO_HELP_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.load(resource_path(AUDIO_HELP_PATH))  # 替换为你的音乐文件路径
     pygame.mixer.music.play()  # 播放音乐
 
 def select_screen(self):
-    background = pygame.image.load(BACKGROUND_SELECT_PATH)
+    background = pygame.image.load(resource_path(BACKGROUND_SELECT_PATH))
     self.screen.blit(background, (0, 0))
-    pygame.mixer.music.load(AUDIO_SELECT_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.load(resource_path(AUDIO_SELECT_PATH))  # 替换为你的音乐文件路径
     pygame.mixer.music.play()  # 播放音乐
 
 def end_screen(self):
     ranSum = random.randint(1, 6)
     if ranSum % 6 == 1:
-        background = pygame.image.load(BACKGROUND_SUCCESS_PATH)
+        background = pygame.image.load(resource_path(BACKGROUND_SUCCESS_PATH))
     elif ranSum % 6 == 2:
-        background = pygame.image.load(BACKGROUND_END_PATH_1)
+        background = pygame.image.load(resource_path(BACKGROUND_END_PATH_1))
     elif ranSum % 6 == 3:
-        background = pygame.image.load(BACKGROUND_END_PATH_2)
+        background = pygame.image.load(resource_path(BACKGROUND_END_PATH_2))
     elif ranSum % 6 == 4:
-        background = pygame.image.load(BACKGROUND_END_PATH_3)
+        background = pygame.image.load(resource_path(BACKGROUND_END_PATH_3))
     elif ranSum % 6 == 5:
-        background = pygame.image.load(BACKGROUND_END_PATH_4)
+        background = pygame.image.load(resource_path(BACKGROUND_END_PATH_4))
     elif ranSum % 6 == 0:
-        background = pygame.image.load(BACKGROUND_END_PATH_5)
+        background = pygame.image.load(resource_path(BACKGROUND_END_PATH_5))
     self.screen.blit(background, (0, 0))
-    pygame.mixer.music.load(AUDIO_FAIL_PATH)  # 替换为你的音乐文件路径
+    pygame.mixer.music.load(resource_path(AUDIO_FAIL_PATH))  # 替换为你的音乐文件路径
     pygame.mixer.music.play()  # 播放音乐
     
 def pause_screen(self):
@@ -102,7 +102,7 @@ class Game:
         self.paused = False  # 新增暂停状态标志
 
         # 加载自定义鼠标
-        cursor_image = pygame.image.load(MOUSE_PATH_3).convert_alpha()  # 支持透明通道
+        cursor_image = pygame.image.load(resource_path(MOUSE_PATH_3)).convert_alpha()  # 支持透明通道
         hotspot = (cursor_image.get_width() // 4, cursor_image.get_height() // 4)
         custom_cursor = pygame.cursors.Cursor(hotspot, cursor_image)
         pygame.mouse.set_cursor(custom_cursor)
@@ -111,9 +111,9 @@ class Game:
         start_screen(self)
 
         # 按钮：start 按钮，点击后跳转到帮助页面
-        button1 = Button(200, 600, 402, 250, BUTTON_START_PATH, "Go to Game", go_to_game_page, self)
+        button1 = Button(200, 600, 402, 250, resource_path(BUTTON_START_PATH), "Go to Game", go_to_game_page, self)
         # 按钮：help 按钮，点击后跳转到游戏页面
-        button2 = Button(678, 600, 402, 250, BUTTON_HELP_PATH, "Go to Help", go_to_help_page, self)
+        button2 = Button(678, 600, 402, 250, resource_path(BUTTON_HELP_PATH), "Go to Help", go_to_help_page, self)
 
         self.buttons.append(button1)
         self.buttons.append(button2)    
@@ -153,11 +153,11 @@ class Game:
     
     def countDown(self):
         countdown_numbers = [3, 2, 1]
-        font = pygame.font.Font(FONT_ALGER_PATH, 200)
+        font = pygame.font.Font(resource_path(FONT_ALGER_PATH), 200)
 
     # 渲染倒计时 3, 2, 1
         for num in countdown_numbers:
-            background = pygame.image.load(BACKGROUND_BEGIN_PATH)
+            background = pygame.image.load(resource_path(BACKGROUND_BEGIN_PATH))
             self.screen.blit(background, (0, 0))  # 渲染背景
             text = font.render(str(num), True, (0, 0, 0))  # 渲染数字
             self.screen.blit(text, (540, 350))  # 显示数字
@@ -165,7 +165,7 @@ class Game:
             time.sleep(1)  # 等待 1 秒钟
 
     # 渲染 "Go!" 字符
-        background = pygame.image.load(BACKGROUND_BEGIN_PATH)
+        background = pygame.image.load(resource_path(BACKGROUND_BEGIN_PATH))
         self.screen.blit(background, (0, 0))  # 渲染背景
         text = font.render("Go!", True, (0, 0, 0))  # 渲染 "Go!" 文本
         self.screen.blit(text, (440, 350))  # 显示 "Go!"
@@ -178,7 +178,7 @@ class Game:
     def select(self):
         select_screen(self)
         text = "请选择你的角色："
-        self.font = pygame.font.Font(FONT_FANGZHENGXIETI, 64)  # 字体设置
+        self.font = pygame.font.Font(resource_path(FONT_FANGZHENGXIETI), 64)  # 字体设置
         text_surface = self.font.render(text, True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(640,150))
         self.screen.blit(text_surface, text_rect)
@@ -227,11 +227,11 @@ class Game:
     def help(self): # 帮助界面
         help_screen(self)
         # 按钮：返回按钮，在帮助界面点击后，跳转回游戏初始界面
-        button3 = Button(800, 600, 234, 250, BUTTON_BACK_PATH, "Go back to Start", go_back_start_page, self)
+        button3 = Button(800, 600, 234, 250, resource_path(BUTTON_BACK_PATH), "Go back to Start", go_back_start_page, self)
         self.buttons.append(button3)
         
         # 添加文字说明
-        font = pygame.font.Font(FONT_FANGZHENGXIETI, 36)  # 使用默认字体，字号36
+        font = pygame.font.Font(resource_path(FONT_FANGZHENGXIETI), 36)  # 使用默认字体，字号36
         text_lines = [
             "本游戏是基于蔚蓝档案素材的射击小游戏",
             "以下是游玩提示：",
@@ -277,7 +277,7 @@ class Game:
             pygame.display.update()
 
     def run(self):
-        pygame.mixer.music.load(AUDIO_FIGHT_PATH)  # 替换为你的音乐文件路径
+        pygame.mixer.music.load(resource_path(AUDIO_FIGHT_PATH))  # 替换为你的音乐文件路径
         pygame.mixer.music.play()  # 播放音乐
         while True:
             if settings.ending:
@@ -298,7 +298,7 @@ class Game:
     def pause(self):
         self.screen.fill((0, 0, 0))
         text = "游戏暂停，按“esc”继续"
-        self.font = pygame.font.Font(FONT_SONGTI, 64)  # 字体设置
+        self.font = pygame.font.Font(resource_path(FONT_SONGTI), 64)  # 字体设置
         text_surface = self.font.render(text, True, (200, 200, 200))
         text_rect = text_surface.get_rect(center=(640,450))
         self.screen.blit(text_surface, text_rect)
@@ -306,13 +306,13 @@ class Game:
     def end(self):
         end_screen(self)
         text = f"游戏结束！本次你的得分为: {presentMark}, 之前你的最高分为: {hightstMark}"
-        self.font = pygame.font.Font(FONT_FANGZHENGXIETI, 48)  # 字体设置
+        self.font = pygame.font.Font(resource_path(FONT_FANGZHENGXIETI), 48)  # 字体设置
         text_surface = self.font.render(text, True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(640,200))
         self.screen.blit(text_surface, text_rect)
         if presentMark >= hightstMark:
             text = f"恭喜你创造了新纪录！"
-            self.font = pygame.font.Font(FONT_SONGTI, 48)  # 字体设置
+            self.font = pygame.font.Font(resource_path(FONT_SONGTI), 48)  # 字体设置
             text_surface = self.font.render(text, True, (0, 0, 0))
             text_rect = text_surface.get_rect(center=(640,360))
             self.screen.blit(text_surface, text_rect)

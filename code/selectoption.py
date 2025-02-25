@@ -7,7 +7,7 @@ class Option:
         self.rect = pygame.Rect(x - width // 2, y, width, height)  # 选项矩形区域
         self.text = text  # 显示的文本
         self.action = action  # 点击后执行的动作
-        self.font = pygame.font.Font(FONT_SONGTI, 30)  # 字体设置
+        self.font = pygame.font.Font(resource_path(FONT_SONGTI), 30)  # 字体设置
         self.color = (255, 255, 255)  # 默认颜色：白色
         self.hover_color = (200, 200, 200)  # 悬停时的颜色：灰色
         self.border_color = (0, 0, 0)  # 边框颜色：黑色

@@ -33,16 +33,16 @@ class Drone(Enemy):
         self.type = type
         # 加载图像
         if type %4 == 1:
-            image_path = DRONE_PATH_1
+            image_path = resource_path(DRONE_PATH_1)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 2:
-            image_path = DRONE_PATH_2
+            image_path = resource_path(DRONE_PATH_2)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 3:
-            image_path = DRONE_PATH_3
+            image_path = resource_path(DRONE_PATH_3)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 0:
-            image_path = DRONE_PATH_4
+            image_path = resource_path(DRONE_PATH_4)
             self.image = pygame.image.load(image_path).convert_alpha()
 
         # 初始位置在屏幕顶部中间
@@ -134,7 +134,7 @@ class Drone(Enemy):
         bullet = Bullet(
             self.rect.centerx,
             self.rect.centery + 20,  # 从底部下方发射
-            15, 15, BULLET_PATH_2, 
+            15, 15, resource_path(BULLET_PATH_2), 
             300, (0, 1),  # 方向向下
             self.ATK, # 攻击力
             group=[self.group, self.enemy_bullets_group]
@@ -154,16 +154,16 @@ class Shooter(Enemy):
         self.type = type
         # 加载图像
         if type %4 == 1:
-            image_path = SHOOTER_1
+            image_path = resource_path(SHOOTER_1)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 2:
-            image_path = SHOOTER_2
+            image_path = resource_path(SHOOTER_2)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 3:
-            image_path = SHOOTER_3
+            image_path = resource_path(SHOOTER_3)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 0:
-            image_path = SHOOTER_4
+            image_path = resource_path(SHOOTER_4)
             self.image = pygame.image.load(image_path).convert_alpha()
 
         # 初始位置在屏幕顶部中间
@@ -232,7 +232,7 @@ class Shooter(Enemy):
         bullet = Bullet(
             self.rect.centerx,  # 添加横向随机偏移
             self.rect.centery + 20,
-            19, 19, BULLET_PATH_2, 
+            19, 19, resource_path(BULLET_PATH_2), 
             400, (random_number, 1),  # 稍慢的子弹速度
             self.ATK,
             group=[self.group, self.enemy_bullets_group]
@@ -257,16 +257,16 @@ class Girl(Shooter):
         self.type = type
         # 加载图像
         if type %4 == 1:
-            image_path = GIRL_1
+            image_path = resource_path(GIRL_1)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 2:
-            image_path = GIRL_2
+            image_path = resource_path(GIRL_2)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 3:
-            image_path = GIRL_3
+            image_path = resource_path(GIRL_3)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 0:
-            image_path = GIRL_4
+            image_path = resource_path(GIRL_4)
             self.image = pygame.image.load(image_path).convert_alpha()
 
 class RocketShooter(Shooter):
@@ -284,16 +284,16 @@ class RocketShooter(Shooter):
         self.type = type
         # 加载图像
         if type %4 == 1:
-            image_path = ROCKETSHOOERT_1
+            image_path = resource_path(ROCKETSHOOERT_1)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 2:
-            image_path = ROCKETSHOOERT_2
+            image_path = resource_path(ROCKETSHOOERT_2)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 3:
-            image_path = ROCKETSHOOERT_3
+            image_path = resource_path(ROCKETSHOOERT_3)
             self.image = pygame.image.load(image_path).convert_alpha()
         elif type %4 == 0:
-            image_path = ROCKETSHOOERT_4
+            image_path = resource_path(ROCKETSHOOERT_4)
             self.image = pygame.image.load(image_path).convert_alpha()
             
     def shoot(self):
@@ -301,7 +301,7 @@ class RocketShooter(Shooter):
         bullet = Bullet(
             self.rect.centerx + random_number,  
             self.rect.centery + 20,
-            36, 98, BULLET_PATH_3, 
+            36, 98, resource_path(BULLET_PATH_3), 
             400, (random_number, 1),  
             self.ATK,
             group=[self.group, self.enemy_bullets_group]
@@ -318,13 +318,13 @@ class Robot(Enemy):
         
         # 根据 type 加载对应的图像
         if type % 4 == 1:
-            image_path = ROBOT_1
+            image_path = resource_path(ROBOT_1)
         elif type % 4 == 2:
-            image_path = ROBOT_2
+            image_path = resource_path(ROBOT_2)
         elif type % 4 == 3:
-            image_path = ROBOT_3
+            image_path = resource_path(ROBOT_3)
         elif type % 4 == 0:
-            image_path = ROBOT_4
+            image_path = resource_path(ROBOT_4)
         self.image = pygame.image.load(image_path).convert_alpha()
         self.rect = self.image.get_rect(center=start_point)
         

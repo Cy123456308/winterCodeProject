@@ -48,7 +48,7 @@ class RoleChoose:
         pygame.draw.rect(surface, (0, 0, 0), self.dialog_rect, 2)
 
         # 使用系统默认字体绘制提示文字
-        font = pygame.font.Font(FONT_SONGTI, 24)
+        font = pygame.font.Font(resource_path(FONT_SONGTI), 24)
         text_surface = font.render(self.dialog_text, True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(self.dialog_rect.centerx, self.dialog_rect.centery - 20))
         surface.blit(text_surface, text_rect)

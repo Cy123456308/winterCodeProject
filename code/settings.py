@@ -131,3 +131,16 @@ def load_high_score():
             return int(f.read())
     except (FileNotFoundError, ValueError):
         return 0  # 文件不存在或内容错误时返回0
+
+import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        # 获取打包后的路径
+        base_path = sys._MEIPASS
+    except Exception:
+        # 开发环境中，使用当前目录
+        base_path = ""
+
+    return os.path.join(base_path, relative_path)
