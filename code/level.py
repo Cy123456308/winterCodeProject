@@ -16,7 +16,6 @@ class Level:
         self.player_penetrate_bullets_group = pygame.sprite.Group()
         self.enemy_bullets = pygame.sprite.Group()
         self.shields = pygame.sprite.Group()
-        #self.bars = pygame.sprite.Group()
         self.role = roleNum
         self.setup()
 
@@ -48,11 +47,12 @@ class Level:
             playerATK=self.player.ATK
         )
         
-    def run(self,dt):
-        self.display_surface.blit(pygame.image.load(BACKGROUND_FIGHT_PATH_FINAL),(0,0))
-        self.collision_manager.check_collisions()
+    def run(self, dt, paused):
+        if not paused:
+            self.display_surface.blit(pygame.image.load(BACKGROUND_FIGHT_PATH_FINAL), (0,0))
+            self.collision_manager.check_collisions()
+            self.all_sprites.update(dt)
         self.all_sprites.draw(self.display_surface)
-        self.all_sprites.update(dt)
         for sprite in self.all_sprites:
             if hasattr(sprite, 'draw_health_bar'):
                 sprite.draw_health_bar(self.display_surface)

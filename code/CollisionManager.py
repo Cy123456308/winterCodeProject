@@ -59,6 +59,9 @@ class CollisionManager:
         )
         for enemy, bullets in enemies_hit.items():
             enemy.take_damage(len(bullets) * self.playerATK)
+            if self.player.canEnhance:
+                self.player.enhanceStart += len(bullets)
+                #print(self.player.ATK, self.player.health)
             #print(f"敌人血量：{enemy.health}")
 
         enemy_penetrate_hit = pygame.sprite.groupcollide(
@@ -70,8 +73,7 @@ class CollisionManager:
         )
         for enemy, bullets in enemy_penetrate_hit.items():
             enemy.take_damage(len(bullets) * self.playerATK)
-        if(self.player.canEnhance):
-            self.player.enhanceStart += len(bullets)
+
             
         player_enemies_hit = pygame.sprite.spritecollide(
             self.player, 

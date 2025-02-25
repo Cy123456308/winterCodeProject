@@ -8,6 +8,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(group)
 
         self.direction = pygame.math.Vector2()
+        self.canEnhance = True
         self.enhanceTime = 5
         self.enhanceStart = 0
 
@@ -42,7 +43,7 @@ class Player(pygame.sprite.Sprite):
             self.health = self.maxHealth
             self.ATK = 12 
             self.bullet_counts = 30
-            self.shootSpeed = 0.05
+            self.shootSpeed = 0.1
             self.canMultipleBullet = True
             self.penetrate = False
             self.canEnhance = False
@@ -64,12 +65,11 @@ class Player(pygame.sprite.Sprite):
             self.speed = 500
             self.maxHealth = 200  
             self.health = self.maxHealth
-            self.ATK = 40 
+            self.ATK = 20 
             self.bullet_counts = 5
-            self.shootSpeed = 0.2
+            self.shootSpeed = 0.5
             self.penetrate = False
             self.canMultipleBullet = False
-            self.canEnhance = True
             
         elif role == 6:
             self.image = pygame.image.load(YUKARI_PATH).convert_alpha()
@@ -121,11 +121,15 @@ class Player(pygame.sprite.Sprite):
                     bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
                 else:
-                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (0, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
-                    bullet = Bullet(self.rect.centerx - 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (-1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx - 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (-1, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
-                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 1000, (1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (1, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    self.bullets.add(bullet)
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (2, -1), self.ATK, group=[self.group, self.player_bullet_group])
+                    self.bullets.add(bullet)
+                    bullet = Bullet(self.rect.centerx + 15, self.rect.centery - self.rect.height / 2, 12, 28, BULLET_PATH_1, 400, (-2, -1), self.ATK, group=[self.group, self.player_bullet_group])
                     self.bullets.add(bullet)
             else:
                 bullet = Bullet(self.rect.centerx, self.rect.centery - self.rect.height / 2, 64, 182, BULLET_PATH_ALICE, 1000, (0, -1), self.ATK, group=[self.group, self.penetrate_bullets_group])
@@ -172,18 +176,14 @@ class Player(pygame.sprite.Sprite):
 
     def draw_health_bar(self, surface):
         
-    # 血条的尺寸可根据敌人图像宽度或自定义
         bar_width = self.rect.width * 0.5
         bar_height = 5
-        # 计算血条填充宽度，按比例显示剩余生命值
         fill_width = int((self.health / self.maxHealth) * bar_width)
     
-        # 血条背景（灰色边框）
         background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
         pygame.draw.rect(surface, (60, 60, 60), background_rect)
         current_ratio = self.health / self.maxHealth
 
-        # 血条填充（绿色）
         fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
         color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
 
@@ -192,13 +192,13 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         if self.canEnhance and self.enhanceStart >= self.enhanceTime:
             if self.ATK < 100:
-                self.ATK += 5
-            self.health += 20
+                self.ATK += 3
+            if(self.health + 5 < self.maxHealth):
+                self.health += 5
             self.enhanceStart -= self.enhanceTime
         
         self.input()
         self.move(dt)
         self.bullet_wait(self.shootSpeed)
         self.reload()  # 调用装弹方法
-
-
+        #print(self.ATK, self.health)

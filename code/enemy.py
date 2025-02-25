@@ -76,12 +76,12 @@ class Drone(Enemy):
         fill_width = int((self.health / self.max_health) * bar_width)
     
         # 血条背景（灰色边框）
-        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.5, self.rect.top + 25, bar_width, bar_height)
         pygame.draw.rect(surface, (60, 60, 60), background_rect)
         current_ratio = self.health / self.max_health
 
         # 血条填充（绿色）
-        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.5, self.rect.top + 25, fill_width, bar_height)
         color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
 
         pygame.draw.rect(surface, color, fill_rect)
@@ -134,7 +134,7 @@ class Drone(Enemy):
             self.rect.centerx,
             self.rect.centery + 20,  # 从底部下方发射
             15, 15, BULLET_PATH_2, 
-            800, (0, 1),  # 方向向下
+            600, (0, 1),  # 方向向下
             self.ATK, # 攻击力
             group=[self.group, self.enemy_bullets_group]
         )
@@ -195,12 +195,12 @@ class Shooter(Enemy):
         fill_width = int((self.health / self.max_health) * bar_width)
     
         # 血条背景（灰色边框）
-        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.5, self.rect.top + 25, bar_width, bar_height)
         pygame.draw.rect(surface, (60, 60, 60), background_rect)
         current_ratio = self.health / self.max_health
 
         # 血条填充（绿色）
-        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.5, self.rect.top + 25, fill_width, bar_height)
         color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
 
         pygame.draw.rect(surface, color, fill_rect)
@@ -231,7 +231,7 @@ class Shooter(Enemy):
             self.rect.centerx,  # 添加横向随机偏移
             self.rect.centery + 20,
             19, 19, BULLET_PATH_2, 
-            600, (random_number, 1),  # 稍慢的子弹速度
+            500, (random_number, 1),  # 稍慢的子弹速度
             self.ATK,
             group=[self.group, self.enemy_bullets_group]
         )
@@ -296,102 +296,16 @@ class RocketShooter(Shooter):
             self.image = pygame.image.load(image_path).convert_alpha()
             
     def shoot(self):
-        # 在角色宽度范围内生成随机偏移
         random_number = 2 * np.random.random() - 1
         bullet = Bullet(
-            self.rect.centerx,  # 添加横向随机偏移
+            self.rect.centerx + random_number,  
             self.rect.centery + 20,
             36, 98, BULLET_PATH_3, 
-            600, (random_number, 1),  # 稍慢的子弹速度
+            500, (random_number, 1),  
             self.ATK,
             group=[self.group, self.enemy_bullets_group]
         )
         self.bullets.add(bullet)
-'''
-class Robot(Enemy):
-    def __init__(self, start_point, end_point, type, group, speed=0.5):
-        self.max_health = 200
-        self.health = self.max_health
-
-        """
-        :param start_point: 起点坐标 (x, y)
-        :param end_point:   终点坐标 (x, y)
-        :param type:        机器人类型（用于选择图像）
-        :param group:       精灵所属组
-        :param speed:       运动速度（控制单位时间内插值进度的变化量）
-        """
-        # 使用起点作为初始位置
-        super().__init__(start_point, group)
-        
-        # 根据 type 加载对应的图像
-        if type % 4 == 1:
-            image_path = ROBOT_1
-        elif type % 4 == 2:
-            image_path = ROBOT_2
-        elif type % 4 == 3:
-            image_path = ROBOT_3
-        elif type % 4 == 0:
-            image_path = ROBOT_4
-        self.image = pygame.image.load(image_path).convert_alpha()
-        self.rect = self.image.get_rect()
-        
-        # 将起点和终点转换为 Vector2
-        self.start_point = pygame.math.Vector2(start_point)
-        self.end_point = pygame.math.Vector2(end_point)
-        
-        # 初始位置设为起点
-        self.pos = self.start_point.copy()
-        self.rect.center = (int(self.pos.x), int(self.pos.y))
-        
-        # 记录沿直线移动的进度（0.0 表示完全在起点，1.0 表示完全到达终点）
-        self.progress = 0.0
-        # 控制运动速度（单位：每秒进度变化量）
-        self.speed = speed
-        # 运动方向，1 表示从起点向终点运动，-1 表示反方向
-        self.direction = 1
-        
-    def draw_health_bar(self, surface):
-    # 血条的尺寸可根据敌人图像宽度或自定义
-        bar_width = self.rect.width * 0.5
-        bar_height = 5
-        # 计算血条填充宽度，按比例显示剩余生命值
-        fill_width = int((self.health / self.max_health) * bar_width)
-    
-        # 血条背景（灰色边框）
-        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
-        pygame.draw.rect(surface, (60, 60, 60), background_rect)
-        current_ratio = self.health / self.max_health
-
-        # 血条填充（绿色）
-        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
-        color = (255 * (1 - current_ratio), 255 * current_ratio, 0)  # 红 -> 黄 -> 绿
-
-        pygame.draw.rect(surface, color, fill_rect)
-        
-    def update(self, dt):
-        """
-        dt: 帧间时间间隔（单位秒）
-        """
-        # 根据时间增量更新进度
-        self.progress += self.direction * dt * self.speed
-        
-        # 当超过 0~1 范围时反向
-        if self.progress >= 1.0:
-            self.progress = 1.0
-            self.direction = -1  # 到达终点后，改变方向
-        elif self.progress <= 0.0:
-            self.progress = 0.0
-            self.direction = 1   # 到达起点后，改变方向
-        
-        # 利用线性插值计算当前位置
-        self.pos = self.start_point.lerp(self.end_point, self.progress)
-        self.rect.center = (int(self.pos.x), int(self.pos.y))
-    
-    def take_damage(self, amount):
-        self.health -= amount
-        if self.health <= 0:
-            self.kill()
-'''
 
 class Robot(Enemy):
     def __init__(self, start_point, type, group, speed=300):
@@ -450,11 +364,11 @@ class Robot(Enemy):
         bar_height = 5
         fill_width = int((self.health / self.max_health) * bar_width)
     
-        background_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, bar_width, bar_height)
+        background_rect = pygame.Rect(self.rect.left + bar_width * 0.5, self.rect.top + 25, bar_width, bar_height)
         pygame.draw.rect(surface, (60, 60, 60), background_rect)
         current_ratio = self.health / self.max_health
 
-        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.25, self.rect.top + 25, fill_width, bar_height)
+        fill_rect = pygame.Rect(self.rect.left + bar_width * 0.5, self.rect.top + 25, fill_width, bar_height)
         color = (255 * (1 - current_ratio), 255 * current_ratio, 0)
         pygame.draw.rect(surface, color, fill_rect)
         

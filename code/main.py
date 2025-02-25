@@ -27,6 +27,9 @@ def select_screen(self):
     background = pygame.image.load(BACKGROUND_SELECT_PATH)
     self.screen.blit(background, (0, 0))
     
+def pause_screen(self):
+    self.pause()
+            
 def go_to_help_page(self):
     self.button_help_clicked = True
 
@@ -68,7 +71,8 @@ class Game:
         self.button_help_clicked = False
         self.button_back_clicked = False
         self.buttons = []
-        
+        self.paused = False  # 新增暂停状态标志
+
         # 加载自定义鼠标
         cursor_image = pygame.image.load(MOUSE_PATH_3).convert_alpha()  # 支持透明通道
         hotspot = (cursor_image.get_width() // 4, cursor_image.get_height() // 4)
@@ -197,8 +201,8 @@ class Game:
             "注意躲避敌人射出的子弹，观察换弹时机",
             "同时注意不要碰到游荡的机器人，否则带来大量伤害",
             "利用掩体作为掩护，保护自己",
-            "通过各个关卡，最后击败最终BOSS即可通关",
-            "还有无尽模式等待您的挑战",
+            "如果撑不住了，可以摁esc暂停游戏，休息一下；再摁esc可继续",
+            "分数将上传网络  ",
             "祝您玩得愉快！"
         ]
         y_position = 90  # 文字起始Y坐标
@@ -237,9 +241,23 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE: 
+                        self.paused = not self.paused
             dt = self.clock.tick() / 1000
-            self.level.run(dt)
+            self.level.run(dt, self.paused)
+            if self.paused:
+                self.pause()  # 渲染暂停界面
             pygame.display.update()
+
+    def pause(self):
+        self.screen.fill((0, 0, 0))
+        text = "游戏暂停，按“esc”继续"
+        self.font = pygame.font.Font(FONT_SONGTI, 64)  # 字体设置
+        text_surface = self.font.render(text, True, (200, 200, 200))
+        text_rect = text_surface.get_rect(center=(640,450))
+        self.screen.blit(text_surface, text_rect)
+
 
 
 if __name__ == '__main__':
