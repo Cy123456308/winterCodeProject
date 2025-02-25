@@ -3,6 +3,7 @@ import numpy as np
 import pygame
 import math
 from settings import *
+import settings
 from bullet import Bullet
 import time
 
@@ -52,13 +53,13 @@ class Drone(Enemy):
         
         # 移动参数
         self.target_pos = pygame.math.Vector2(target_pos)
-        self.oscillation_range = 80  # 左右摆动范围
+        self.oscillation_range = 160  # 左右摆动范围
         self.oscillation_speed = 1.5  # 摆动速度（弧度/秒）
         self.oscillation_phase = 0    # 摆动相位
         self.ATK = 10
         
         # 射击参数
-        self.burst_duration = 5.4    # 持续射击时间（秒）
+        self.burst_duration = 4.4    # 持续射击时间（秒）
         self.pause_duration = 3.2    # 射击间隔时间（秒）
         self.is_bursting = True      # 当前是否处于射击阶段
         self.last_phase_change = time.time()  # 上次阶段切换时间
@@ -134,7 +135,7 @@ class Drone(Enemy):
             self.rect.centerx,
             self.rect.centery + 20,  # 从底部下方发射
             15, 15, BULLET_PATH_2, 
-            600, (0, 1),  # 方向向下
+            300, (0, 1),  # 方向向下
             self.ATK, # 攻击力
             group=[self.group, self.enemy_bullets_group]
         )
@@ -144,7 +145,8 @@ class Drone(Enemy):
         self.health -= amount
         if self.health <= 0:
             self.kill()
-
+            settings.presentMark += 10
+            
 class Shooter(Enemy):
     def __init__(self, target_pos, type, group, bulletGruop):
         self.max_health = 200
@@ -231,7 +233,7 @@ class Shooter(Enemy):
             self.rect.centerx,  # 添加横向随机偏移
             self.rect.centery + 20,
             19, 19, BULLET_PATH_2, 
-            500, (random_number, 1),  # 稍慢的子弹速度
+            400, (random_number, 1),  # 稍慢的子弹速度
             self.ATK,
             group=[self.group, self.enemy_bullets_group]
         )
@@ -241,7 +243,7 @@ class Shooter(Enemy):
         self.health -= amount
         if self.health <= 0:
             self.kill()
-
+            settings.presentMark += 10
 class Girl(Shooter):
     def __init__(self, target_pos, type, group, bulletGruop):
         # 继承父类初始化，并修改血量和攻击力
@@ -272,7 +274,6 @@ class RocketShooter(Shooter):
         # 继承父类初始化，并修改血量和攻击力
         super().__init__(target_pos, type, group, bulletGruop)
         
-        # 修改弱版Shooter的血量和攻击力
         self.max_health = 120  
         self.health = self.max_health  # 设置当前血量
         self.burst_duration = 4.0    
@@ -301,7 +302,7 @@ class RocketShooter(Shooter):
             self.rect.centerx + random_number,  
             self.rect.centery + 20,
             36, 98, BULLET_PATH_3, 
-            500, (random_number, 1),  
+            400, (random_number, 1),  
             self.ATK,
             group=[self.group, self.enemy_bullets_group]
         )
@@ -376,3 +377,4 @@ class Robot(Enemy):
         self.health -= amount
         if self.health <= 0:
             self.kill()
+            settings.presentMark += 10

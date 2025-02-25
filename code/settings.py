@@ -1,4 +1,3 @@
-from pygame.math import Vector2
 # screen
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 900
@@ -21,6 +20,12 @@ BACKGROUND_FIGHT_PATH_6 = BACKGROUND_PATH + "战斗界面六.jpg"
 BACKGROUND_FAIL_PATH = BACKGROUND_PATH + "战败界面.jpg"
 BACKGROUND_SUCCESS_PATH = BACKGROUND_PATH + "通关界面.jpg"
 BACKGROUND_HELP_PATH = BACKGROUND_PATH + "帮助界面.jpg"
+BACKGROUND_END_PATH_1 = BACKGROUND_PATH + "补习部.jpg"
+BACKGROUND_END_PATH_2 = BACKGROUND_PATH + "兔子小队.jpg"
+BACKGROUND_END_PATH_3 = BACKGROUND_PATH + "对策委.jpg"
+BACKGROUND_END_PATH_4 = BACKGROUND_PATH + "黑未花.jpg"
+BACKGROUND_END_PATH_5 = BACKGROUND_PATH + "白子.jpg"
+
 
 
 BACKGROUND_SELECT_PATH = BACKGROUND_PATH + "选择角色.jpg"
@@ -103,3 +108,21 @@ MOMOI_LINES = "桃：射速较快，可扇形攻击，较脆"
 MIDORI_LINES = "绿：射速较快，单发伤害较高，较脆"
 YUZU_LINES = "柚子：击中敌人能回血并增加自身属性"
 YUKARI_LINES = "优香：血量极高，输出较为疲软"
+
+presentMark = 0
+hightstMark = 0
+
+ending = False
+
+def save_high_score(score):
+    """保存新的最高分"""
+    with open("high_score.txt", "w") as f:
+        f.write(str(score))
+        
+def load_high_score():
+    """加载历史最高分"""
+    try:
+        with open("high_score.txt", "r") as f:
+            return int(f.read())
+    except (FileNotFoundError, ValueError):
+        return 0  # 文件不存在或内容错误时返回0

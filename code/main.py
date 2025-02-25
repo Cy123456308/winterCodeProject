@@ -1,6 +1,8 @@
+import random
 import time
 import pygame, sys
 from CollisionManager import CollisionManager
+import settings
 from settings import *
 from player import Player
 from level import Level
@@ -25,6 +27,22 @@ def help_screen(self):
 
 def select_screen(self):
     background = pygame.image.load(BACKGROUND_SELECT_PATH)
+    self.screen.blit(background, (0, 0))
+
+def end_screen(self):
+    ranSum = random.randint(1, 6)
+    if ranSum % 6 == 1:
+        background = pygame.image.load(BACKGROUND_SUCCESS_PATH)
+    elif ranSum % 6 == 2:
+        background = pygame.image.load(BACKGROUND_END_PATH_1)
+    elif ranSum % 6 == 3:
+        background = pygame.image.load(BACKGROUND_END_PATH_2)
+    elif ranSum % 6 == 4:
+        background = pygame.image.load(BACKGROUND_END_PATH_3)
+    elif ranSum % 6 == 5:
+        background = pygame.image.load(BACKGROUND_END_PATH_4)
+    elif ranSum % 6 == 0:
+        background = pygame.image.load(BACKGROUND_END_PATH_5)
     self.screen.blit(background, (0, 0))
     
 def pause_screen(self):
@@ -64,6 +82,7 @@ def go_to_countdown_6(self):
     self.button_select_clicked = True
 class Game:
     def __init__(self):
+        settings.ending = False
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, COLOR_WIDTH)
         pygame.display.set_caption('小游戏')
@@ -149,6 +168,12 @@ class Game:
     
     def select(self):
         select_screen(self)
+        text = "请选择你的角色："
+        self.font = pygame.font.Font(FONT_FANGZHENGXIETI, 64)  # 字体设置
+        text_surface = self.font.render(text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=(640,150))
+        self.screen.blit(text_surface, text_rect)
+        
         self.buttons = [
             Option(640, 250, 572, 50, SHIRONO_LINES, go_to_countdown_1, self),
             Option(640, 350, 572, 50, ALICE_LINES, go_to_countdown_2, self),
@@ -195,14 +220,14 @@ class Game:
             "本游戏是基于蔚蓝档案素材的射击小游戏",
             "以下是游玩提示：",
             "点击“开始冒险”进入角色选择界面",
+            "通过上下左右键移动，空格键射击",
             "不同角色有不同的特性，如血量，射速等",
-            "注意所有角色，包括自己和敌人，都有换弹",
             "选择角色后开始游戏",
             "注意躲避敌人射出的子弹，观察换弹时机",
             "同时注意不要碰到游荡的机器人，否则带来大量伤害",
             "利用掩体作为掩护，保护自己",
             "如果撑不住了，可以摁esc暂停游戏，休息一下；再摁esc可继续",
-            "分数将上传网络  ",
+            "分数将上传网络",
             "祝您玩得愉快！"
         ]
         y_position = 90  # 文字起始Y坐标
@@ -237,6 +262,8 @@ class Game:
 
     def run(self):
         while True:
+            if settings.ending:
+                self.end()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -258,6 +285,54 @@ class Game:
         text_rect = text_surface.get_rect(center=(640,450))
         self.screen.blit(text_surface, text_rect)
 
+    def end(self):
+        end_screen(self)
+        text = f"游戏结束！本次你的得分为: {presentMark}, 之前你的最高分为: {hightstMark}"
+        self.font = pygame.font.Font(FONT_SONGTI, 32)  # 字体设置
+        text_surface = self.font.render(text, True, (200, 200, 200))
+        text_rect = text_surface.get_rect(center=(640,200))
+        self.screen.blit(text_surface, text_rect)
+        if presentMark >= hightstMark:
+            text = f"恭喜你创造了新纪录！"
+            self.font = pygame.font.Font(FONT_SONGTI, 32)  # 字体设置
+            text_surface = self.font.render(text, True, (200, 200, 200))
+            text_rect = text_surface.get_rect(center=(640,320))
+            self.screen.blit(text_surface, text_rect)
+        settings.hightstMark = max(settings.hightstMark, settings.presentMark)
+        settings.presentMark = 0
+        self.buttons = [
+            Option(320, 650, 120, 50, "退出游戏", self.returnStart, self),
+            Option(960, 650, 120, 50, "返回开头", self.exitGame, self),
+        ]
+        while True:
+            for btn in self.buttons:
+                btn.draw(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN and not self.button_select_clicked:
+                    mouse_pos = pygame.mouse.get_pos()
+                    for btn in self.buttons:
+                        btn.is_clicked(mouse_pos)
+
+            if self.button_select_clicked:
+                self.button_select_clicked = False
+                self.buttons = []
+                self.level = Level(self.roleNum)
+                self.countDown()
+
+            pygame.display.update()
+    
+    def returnStart(self):
+        game = Game()
+        game.start()
+    
+    def exitGame(self):
+        pygame.quit()
+        sys.exit()
 
 
 if __name__ == '__main__':

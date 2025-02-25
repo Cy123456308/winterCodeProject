@@ -1,4 +1,5 @@
 import pygame
+import settings
 from settings import *
 from bullet import Bullet
 import time
@@ -173,6 +174,7 @@ class Player(pygame.sprite.Sprite):
         self.health -= amount
         if self.health <= 0:
             self.kill()
+            settings.ending = True
 
     def draw_health_bar(self, surface):
         
